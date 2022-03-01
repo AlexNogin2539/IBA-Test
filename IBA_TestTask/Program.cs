@@ -63,7 +63,7 @@ namespace IBA_TestTask
 
             if (!(DataAccessCheck() == 0))
             {
-                Console.WriteLine("No data access!");     
+                Console.WriteLine("Service is not avilable!");     
                 Environment.Exit(0);
             }
 
