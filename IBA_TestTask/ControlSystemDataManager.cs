@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -10,8 +8,6 @@ namespace IBA_TestTask
 {
     public class ControlSystemDataManager
     {
-        private readonly DateTimeOffset startTime = DateTimeOffset.UtcNow.AddDays(-1).AddHours(9);
-
         BinaryFormatter formatter = new BinaryFormatter();
 
         private string filePath = string.Empty;
@@ -31,20 +27,19 @@ namespace IBA_TestTask
             }
         }
 
-        public void AddData(ControlSystemData newData)
+        public void AddData(DateTime date, double speed, string idNumber)
         {
             var data = DeserializeData();
+            var newData = new ControlSystemData()
+            {
+                DateTime = date,
+                VehicleIDNumber = idNumber,
+                VehicleSpeed = speed
+            };
+
             data.Add(newData);
             SerializeData(data);
-            Console.WriteLine($"Cotrol system data was added successfully!\n");
-        }
-
-        public void AddData(List<ControlSystemData> newData)
-        {
-            var data = DeserializeData();
-            data.AddRange(newData);
-            SerializeData(data);
-            Console.WriteLine($"Cotrol system data was added successfully!\n");
+            Console.WriteLine($"Data was added successfully!\n");
         }
 
         public void ReadOutspeedData(DateTime date, double speed)

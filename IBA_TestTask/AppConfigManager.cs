@@ -2,16 +2,13 @@
 
 namespace IBA_TestTask
 {
-    public class AppConfigManager
+    public static class AppConfigManager
     {
-        public AppConfigManager()
-        {
-            StartTime = int.Parse(ConfigurationManager.AppSettings["startTime"]);
-            FinishTime = int.Parse(ConfigurationManager.AppSettings["finishTime"]);
-        }
+        public static int StartTime = int.Parse(ConfigurationManager.AppSettings["startTime"]);
 
-        public int StartTime { get; }
+        public static int FinishTime = int.Parse(ConfigurationManager.AppSettings["finishTime"]);
 
-        public int FinishTime { get; }
+        public static string FileName = ConfigurationManager.AppSettings["fileName"];
     }
 }
+
