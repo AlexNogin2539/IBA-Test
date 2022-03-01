@@ -40,8 +40,9 @@ namespace IBA_TestTask
 
         public static int DataAccessCheck()
         {
-            DateTime startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 09, 00, 00);
-            DateTime finishTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 21, 00, 00);
+            var configManager = new AppConfigManager();
+            DateTime startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, configManager.StartTime, 00, 00);
+            DateTime finishTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, configManager.FinishTime, 00, 00);
             return DateTime.Compare(startTime, DateTime.Now) + DateTime.Compare(finishTime, DateTime.Now); 
         }
 
@@ -63,8 +64,8 @@ namespace IBA_TestTask
 
             if (!(DataAccessCheck() == 0))
             {
-                Console.WriteLine("Service is not avilable!");     
-                Environment.Exit(0);
+                Console.WriteLine("Service is not avilable!");
+                return;
             }
 
             bool looping = true;
