@@ -18,12 +18,9 @@ namespace IBA_TestTask
 
             if (!File.Exists(filePath))
             {
-                var ControlSystemData = new List<ControlSystemData>();
+                var controlSystemData = new List<ControlSystemData>();
 
-                using (var filestream = new FileStream(filePath, FileMode.OpenOrCreate))
-                {
-                    formatter.Serialize(filestream, ControlSystemData);
-                }
+                SerializeData(controlSystemData);
             }
         }
 
@@ -47,6 +44,12 @@ namespace IBA_TestTask
             var data = DeserializeData();
             var outSpeed = data.Where(d => d.DateTime.Date == date && d.VehicleSpeed > speed);
 
+            if (outSpeed.Count() == 0)
+            {
+                Console.WriteLine("No search results\n");
+                return;
+            }
+
             foreach (var o in outSpeed)
             {
                 Console.WriteLine($"{o.DateTime} {o.VehicleIDNumber} {o.VehicleSpeed}");
@@ -60,7 +63,7 @@ namespace IBA_TestTask
 
             var maxSpeed = data.Where(p => p.DateTime.Date == date).OrderByDescending(p => p.VehicleSpeed).FirstOrDefault();
 
-            Console.WriteLine($"{maxSpeed.DateTime} {maxSpeed.VehicleIDNumber} {maxSpeed.VehicleSpeed}\n");
+            Console.WriteLine(maxSpeed == null ? "No search result" : $"{maxSpeed.DateTime} {maxSpeed.VehicleIDNumber} {maxSpeed.VehicleSpeed}");
         }
 
         public void ReadMinSpeedData(DateTime date)
@@ -69,12 +72,18 @@ namespace IBA_TestTask
 
             var minSpeed = data.Where(p => p.DateTime.Date == date).OrderByDescending(p => p.VehicleSpeed).LastOrDefault();
 
-            Console.WriteLine($"{minSpeed.DateTime} {minSpeed.VehicleIDNumber} {minSpeed.VehicleSpeed}\n");
+            Console.WriteLine(minSpeed == null ? "" : $"{minSpeed.DateTime} {minSpeed.VehicleIDNumber} {minSpeed.VehicleSpeed}\n");
         }
 
         public void ReadAllData()
         {
             var data = DeserializeData();
+
+            if (data.Count() == 0)
+            {
+                Console.WriteLine("No data in file\n");
+                return;
+            }
 
             foreach(var d in data)
             {
@@ -93,11 +102,19 @@ namespace IBA_TestTask
 
         private List<ControlSystemData> DeserializeData()
         {
-            using (var filestream = new FileStream(filePath, FileMode.OpenOrCreate))
+            try
             {
-                var controlSystemData = (List<ControlSystemData>)formatter.Deserialize(filestream);
-                return controlSystemData;
+                using (var filestream = new FileStream(filePath, FileMode.OpenOrCreate))
+                {
+                    return (List<ControlSystemData>)formatter.Deserialize(filestream);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Can not deserialize file. Reason: {ex.Message}");
+            }
+
+            return new List<ControlSystemData>();
         }
     }
 }

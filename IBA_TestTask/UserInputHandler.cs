@@ -9,10 +9,10 @@ namespace IBA_TestTask
 
         public DateTime GetDate()
         {
-            Console.Write("Enter the date: ");
-            string date = Console.ReadLine();
+            Console.Write("Enter the date [YYYY.MM.DD HH:MM:SS]: ");
+            var date = Console.ReadLine();
             Console.WriteLine();
-            bool result = DateTime.TryParse(date, out var newDate);
+            var result = DateTime.TryParse(date, out var newDate);
             while (!result)
             {
                 Console.Write("Wrong format: ");
@@ -25,11 +25,10 @@ namespace IBA_TestTask
 
         public double GetSpeed()
         {
-            Console.Write("Enter the speed: ");
-            string speed = Console.ReadLine();
+            Console.Write("Enter the speed [DD,DD]: ");
+            var speed = Console.ReadLine();
             Console.WriteLine();
-            double newSpeed;
-            bool result = double.TryParse(speed, out newSpeed);
+            var result = double.TryParse(speed, out var newSpeed);
             while (!result)
             {
                 Console.Write("Wrong format: ");
@@ -42,13 +41,13 @@ namespace IBA_TestTask
 
         public string GetIDNumber()
         {
-            Console.Write("Enter the ID number: ");
-            string IDNumber = Console.ReadLine();
+            Console.Write("Enter the ID number [DDDD LL-D(1-7)]: ");
+            var IDNumber = Console.ReadLine();
             Console.WriteLine();
             while (!Regex.IsMatch(IDNumber, IDNumberPattern))
             {
                 Console.WriteLine();
-                Console.Write("Please, enter in format [DDDD LL-D]: ");
+                Console.Write("Wrong format: ");
                 IDNumber = Console.ReadLine();
             }
             return IDNumber;
